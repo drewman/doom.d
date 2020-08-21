@@ -59,7 +59,12 @@
 (setq deft-directory "~/org")
 (setq deft-recursive t)
 (setq org-roam-directory "~/org/notes")
-(setq org-agenda-files "~/org/tasks")
+(setq org-agenda-files '("~/org/tasks"))
+(defvar my/refile-targets
+  (mapcar 'abbreviate-file-name
+          (split-string
+           (shell-command-to-string "find -L ~/org -name '*.org'") "\n")))
+(setq org-refile-targets '((my/refile-targets :maxlevel . 2)))
 
 (after! time-stamp
   (add-hook 'write-file-functions 'time-stamp))

@@ -71,9 +71,10 @@
 
 (map! :after org
       :map org-mode-map
-      :n :desc "org-refile" "C-c r" #'org-refile
-      :n :desc "org-roam-insert" "C-c i" #'org-roam-insert
-      :n :desc "org-roam-insert" "C-c I" #'org-roam-insert-immediate)
+      :n :desc "refile headline" "C-c r" #'org-refile
+      :n :desc "insert snippet" "C-c s" #'yas-insert-snippet
+      :n :desc "insert link & goto" "C-c i" #'org-roam-insert
+      :n :desc "insert link" "C-c I" #'org-roam-insert-immediate)
 
 (setq org-roam-capture-templates
       '(

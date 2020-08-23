@@ -76,6 +76,14 @@
       :n :desc "insert link & goto" "C-c i" #'org-roam-insert
       :n :desc "insert link" "C-c I" #'org-roam-insert-immediate)
 
+;; I do not want properties to be exported when I run org-babel-tangle with ':comments org'
+;; This will only give me the headline
+(defun my/remove-properties (str)
+  (string-join (seq-filter (lambda (st) (not (string-prefix-p ":" st))) (split-string str "\n")) "\n")
+  )
+
+(setq org-babel-process-comment-text 'my/remove-properties)
+
 (setq org-roam-capture-templates
       '(
         ("l" "literature" plain (function org-roam--capture-get-point)

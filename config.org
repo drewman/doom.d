@@ -1,29 +1,33 @@
-* Name & email
+* Config
+:PROPERTIES:
+:header-args: :results output silent
+:END:
+** Name & email
 #+BEGIN_SRC elisp
 (setq user-full-name "Drew Bruce"
       user-mail-address "drew@drewbruce.com")
 (defvar my/work-email "drew.bruce@nike.com")
 #+END_SRC
-* DOOM UI
+** DOOM UI
 #+BEGIN_SRC elisp
 (setq doom-font (font-spec :family "monospace" :size 14))
 (setq doom-theme 'doom-one)
 (setq display-line-numbers-type t)
 #+END_SRC
-* Org
-** Directories
+** Org
+*** Directories
 #+BEGIN_SRC elisp
 (setq org-directory "~/org/")
 (setq deft-directory "~/org")
 (setq org-roam-directory "~/org/notes")
-(setq org-agenda-files '("~/org/tasks", "~/.doom.d/config.org"))
+(setq org-agenda-files '("~/org/tasks" "~/.doom.d/config.org"))
 #+END_SRC
-** Deft
+*** Deft
 #+BEGIN_SRC elisp
 (setq deft-extensions '("txt" "tex" "org"))
 (setq deft-recursive t)
 #+END_SRC
-** Refiling
+*** Refiling
 #+BEGIN_SRC elisp
 (defvar my/refile-targets
   (mapcar 'abbreviate-file-name
@@ -31,7 +35,7 @@
            (shell-command-to-string "find -L ~/org -name '*.org'") "\n")))
 (setq org-refile-targets '((my/refile-targets :maxlevel . 2)))
 #+END_SRC
-** Keybinds
+*** Keybinds
 #+BEGIN_SRC elisp
 (map! :after org
       :map org-mode-map
@@ -40,14 +44,14 @@
       :n :desc "insert link & goto" "C-c i" #'org-roam-insert
       :n :desc "insert link" "C-c I" #'org-roam-insert-immediate)
 #+END_SRC
-** Spell-fu
+*** Spell-fu
 Do not spell check words in SRC blocks. Not working very well ATM.
 #+BEGIN_SRC elisp
 (setq-hook! 'org-mode-hook
   spell-fu-faces-exclude '(org-src-block-faces))
 #+END_SRC
-*** TODO Fix spell-fu exclude org src block
-** Capture Templates
+**** TODO Fix spell-fu exclude org src block
+*** Capture Templates
 #+BEGIN_SRC elisp
 (after! org-roam
     (setq org-roam-capture-templates
@@ -88,15 +92,15 @@ Do not spell check words in SRC blocks. Not working very well ATM.
             :head "#+title: %<%Y-%m-%d>\n#+roam_tags\n")
         )))
 #+END_SRC
-** Babel
+*** Babel
 When running org-babel-tangle with ':comments org|both' strip out properties from comments
 #+BEGIN_SRC elisp
-(after! org-babel
-    (defun my/remove-properties (str)
-        (string-join (seq-filter (lambda (st) (not (string-prefix-p ":" st))) (split-string str "\n")) "\n"))
-    (setq org-babel-process-comment-text 'my/remove-properties))
+(defun my/remove-properties (str)
+    (string-join (seq-filter (lambda (st) (not (string-prefix-p ":" st))) (split-string str "\n")) "\n"))
+(setq org-babel-process-comment-text 'my/remove-properties)
 #+END_SRC
-* Global binds
+
+** Global binds
 #+BEGIN_SRC elisp
 (map! :leader
       :desc "M-x" "x" #'counsel-M-x
@@ -104,20 +108,28 @@ When running org-babel-tangle with ':comments org|both' strip out properties fro
       :desc "org-capture" "n n" #'org-roam-capture
       :desc "org-today" "n j" #'org-roam-dailies-today)
 #+END_SRC
-* Time stamps
+** Time stamps
 Add time-stamps to Time-stamp: <> (in first 8 lines) when writing files
-Not working very well for me ATM. Exporting timestamps is awkward.
+Not working very well for me ATM. Exporting timestamps is awkward.)
 #+BEGIN_SRC elisp
+(setq-hook! 'before-save-hook #'')
 (after! time-stamp
   (add-hook 'write-file-functions 'time-stamp))
 #+END_SRC
-** TODO Change time-stamp to '#+LAST_CHANGED' or something
-* Elfeed
+*** TODO Change time-stamp to '#+LAST_MODIFIED'
+https://org-roam.discourse.group/t/update-a-field-last-modified-at-save/321
+discusses a solution
+** Elfeed
 setup goodies
 #+BEGIN_SRC elisp
 (elfeed-goodies/setup)
 #+END_SRC
 
+* Packages
+#+BEGIN_SRC elisp :tangle packages.el
+(package! gh-md)
+(package! elfeed-goodies)
+#+END_SRC
 * Helpful
 ** Macros
 *** load!

@@ -18,22 +18,28 @@
 *** Directories
 #+BEGIN_SRC elisp
 (setq org-directory "~/org/")
-(setq deft-directory "~/org")
 (setq org-roam-directory "~/org/notes")
-(setq org-agenda-files '("~/org/tasks" "~/.doom.d/config.org"))
+(setq org-agenda-files (cons "~/.doom.d/config.org"(directory-files-recursively "~/org/notes" "\\.org$")))
+#+END_SRC
+*** Links
+Set link file path to always use absolute paths. This should help links not break when refiling (so long as files never move :)
+#+BEGIN_SRC elisp
+(setq org-link-file-path-type "absolute")
 #+END_SRC
 *** Deft
 #+BEGIN_SRC elisp
+(setq deft-directory "~/org")
 (setq deft-extensions '("txt" "tex" "org"))
 (setq deft-recursive t)
 #+END_SRC
 *** Refiling
+Allow refiling to anything in the org directory, up to one bullet point. More bullet points makes refiling slow.
 #+BEGIN_SRC elisp
 (defvar my/refile-targets
   (mapcar 'abbreviate-file-name
           (split-string
            (shell-command-to-string "find -L ~/org -name '*.org'") "\n")))
-(setq org-refile-targets '((my/refile-targets :maxlevel . 2)))
+(setq org-refile-targets '((my/refile-targets :maxlevel . 1)))
 #+END_SRC
 *** Keybinds
 #+BEGIN_SRC elisp
@@ -50,36 +56,32 @@ Do not spell check words in SRC blocks. Not working very well ATM.
 (setq-hook! 'org-mode-hook
   spell-fu-faces-exclude '(org-src-block-faces))
 #+END_SRC
-**** TODO Fix spell-fu exclude org src block
+**** TODO [#C] Fix spell-fu exclude org src block
+*** Todos
+I dislike dooms todo system, so set it back to the default (TODO, DONE).
+#+BEGIN_SRC elisp
+(after! org
+    (setq org-todo-keywords '((sequence "TODO" "DONE"))))
+#+END_SRC
 *** Capture Templates
 #+BEGIN_SRC elisp
 (after! org-roam
     (setq org-roam-capture-templates
         '(
-            ("l" "literature" plain (function org-roam--capture-get-point)
-            "%?"
-            :file-name "literature/${slug}"
-            :head "#+title: ${title}\n#+date: %<%m/%d/%Y>\nTime-stamp: <>\n"
-            :empty-lines 1
+            ("b" "bullet" entry (function org-roam--capture-get-point)
+            "* %?\n"
+            :file-name "inbox.org"
+            :head "#+title: ${title}\n#+author: %n\n#+date: %<%m/%d/%Y>\n\n"
             :unnarrowed t)
-            ("m" "meeting" plain (function org-roam--capture-get-point)
-            "%?"
-            :file-name "meeting/${slug}"
-            :head "#+title: ${title}\n#+date: %<%m/%d/%Y>\nTime-stamp: <>\n"
-            :empty-lines 1
+            ("t" "todo" entry (function org-roam--capture-get-point)
+            "* TODO %?\n"
+            :file-name "inbox.org"
+            :head "#+title: ${title}\n#+author: %n\n#+date: %<%m/%d/%Y>\n\n"
             :unnarrowed t)
-            ("p" "project" plain (function org-roam--capture-get-point)
-
+            ("s" "slip" plain (function org-roam--capture-get-point)
             "%?"
-            :file-name "project/${slug}"
-            :head "#+title: ${title}\n#+date: %<%m/%d/%Y>\nTime-stamp: <>\n"
-            :empty-lines 1
-            :unnarrowed t)
-            ("t" "topic" plain (function org-roam--capture-get-point)
-            "%?"
-            :file-name "topic/${slug}"
-            :head "#+title: ${title}\n#+date: %<%m/%d/%Y>\nTime-stamp: <>\n"
-            :empty-lines 1
+            :file-name "${slug}"
+            :head "#+title: ${title}\n#+author: %n\n#+date: %<%m/%d/%Y>\n\n"
             :unnarrowed t)
             ))
 
@@ -88,8 +90,8 @@ Do not spell check words in SRC blocks. Not working very well ATM.
             ("d" "daily" plain (function org-roam--capture-get-point)
             ""
             :immediate-finish t
-            :file-name "journal/%<%Y-%m-%d>"
-            :head "#+title: %<%Y-%m-%d>\n#+roam_tags\n")
+            :file-name "%<%Y-%m-%d>"
+            :head "#+title: %<%Y-%m-%d>\n#+roam_tags\n\n")
         )))
 #+END_SRC
 *** Babel
@@ -99,8 +101,15 @@ When running org-babel-tangle with ':comments org|both' strip out properties fro
     (string-join (seq-filter (lambda (st) (not (string-prefix-p ":" st))) (split-string str "\n")) "\n"))
 (setq org-babel-process-comment-text 'my/remove-properties)
 #+END_SRC
-
-** Global binds
+** COMMENT Global binds
+The ESC key is too far away. 'jk' is much easier to move to normal mode. (This is the doom default but included for specificity)
+The doom default is to exclude for visual mode (as well as normal, multiedit, emacs, and motion) but I don't want 'jk' to work for simplicity.
+#+BEGIN_SRC elisp
+(after! evil-escape
+        (setq evil-escape-excluded-states '(normal multiedit emacs motion))
+        (setq evil-escape-key-sequence "jk"))
+#+END_SRC
+Convenience binds for all modes.
 #+BEGIN_SRC elisp
 (map! :leader
       :desc "M-x" "x" #'counsel-M-x
@@ -108,15 +117,19 @@ When running org-babel-tangle with ':comments org|both' strip out properties fro
       :desc "org-capture" "n n" #'org-roam-capture
       :desc "org-today" "n j" #'org-roam-dailies-today)
 #+END_SRC
+Set alt-leader to C-space instead of M-space to not conflict with my system binds.
+#+BEGIN_SRC elisp
+(setq doom-leader-alt-key "C-SPC")
+(setq doom-localleader-alt-key "C-SPC m")
+#+END_SRC
 ** Time stamps
 Add time-stamps to Time-stamp: <> (in first 8 lines) when writing files
 Not working very well for me ATM. Exporting timestamps is awkward.)
 #+BEGIN_SRC elisp
-(setq-hook! 'before-save-hook #'')
 (after! time-stamp
   (add-hook 'write-file-functions 'time-stamp))
 #+END_SRC
-*** TODO Change time-stamp to '#+LAST_MODIFIED'
+*** TODO [#C] Change time-stamp to '#+LAST_MODIFIED'
 https://org-roam.discourse.group/t/update-a-field-last-modified-at-save/321
 discusses a solution
 ** Elfeed
@@ -124,13 +137,21 @@ setup goodies
 #+BEGIN_SRC elisp
 (elfeed-goodies/setup)
 #+END_SRC
-
+** Scratch
+#+BEGIN_SRC elisp
+(setq initial-major-mode 'lisp-interaction-mode)
+(setq initial-scratch-message "\
+;; This buffer is for notes you don't want to save, and for Lisp evaluation.
+;; If you want to create a file, visit that file with C-x C-f,
+;; then enter the text in that file's own buffer.")
+#+END_SRC
 * Packages
 #+BEGIN_SRC elisp :tangle packages.el
 (package! gh-md)
 (package! elfeed-goodies)
 #+END_SRC
-* Helpful
+
+* Helpful Doom Stuff
 ** Macros
 *** load!
 for loading external *.el files relative to this one

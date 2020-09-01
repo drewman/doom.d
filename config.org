@@ -133,13 +133,20 @@ Not working very well for me ATM. Exporting timestamps is awkward.)
 https://org-roam.discourse.group/t/update-a-field-last-modified-at-save/321
 discusses a solution
 ** Elfeed
-setup goodies
+Elfeed goodies make elfeed look a lot nicer. Since it's not included with doom, need to run the setup function.
 #+BEGIN_SRC elisp
 (elfeed-goodies/setup)
 #+END_SRC
 ** Scratch
+*** Initial mode
+Doom sets the scratch initial major mode to fundamental which sucks for lisp autocompletion.
+Instead of changing the mode everytime, just start in lisp mode.
 #+BEGIN_SRC elisp
 (setq initial-major-mode 'lisp-interaction-mode)
+#+END_SRC
+*** Initial message
+Put in initial message in the scratch buffer to help me remember stuff.
+#+BEGIN_SRC elisp
 (setq initial-scratch-message "\
 ;; This buffer is for notes you don't want to save, and for Lisp evaluation.
 ;; If you want to create a file, visit that file with C-x C-f,
@@ -147,7 +154,7 @@ setup goodies
 #+END_SRC
 ** Modeline
 *** Time
-Trying having the time in the modeline.
+Trying having the time in the modeline to see if I like it.
 #+BEGIN_SRC elisp
 (display-time-mode 1)
 #+END_SRC

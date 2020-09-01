@@ -151,10 +151,20 @@ Trying having the time in the modeline.
 #+BEGIN_SRC elisp
 (display-time-mode 1)
 #+END_SRC
+** Shell
+*** exec-path-from-shell
+I've added exec-path-from-shell to (hopefully) resolve some of the issues where code is producing a different result in emacs.
+Since, it's not included with doom, we have to initialize it (for macos and linux systems only).
+#+BEGIN_SRC elisp
+(after! exec-path-from-shell
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize)))
+#+END_SRC
 * Packages
 #+BEGIN_SRC elisp :tangle packages.el
 (package! gh-md)
 (package! elfeed-goodies)
+(package! exec-path-from-shell)
 #+END_SRC
 
 * Helpful Doom Stuff

@@ -11,7 +11,7 @@
 ** DOOM UI
 #+BEGIN_SRC elisp
 (setq doom-font (font-spec :family "monospace" :size 14))
-(setq doom-theme 'doom-one)
+(setq doom-theme 'wilmersdorf)
 (setq display-line-numbers-type t)
 #+END_SRC
 ** Org
@@ -95,7 +95,8 @@ I dislike dooms todo system, so set it back to the default (TODO, DONE).
         )))
 #+END_SRC
 *** Babel
-When running org-babel-tangle with ':comments org|both' strip out properties from comments
+When running org-babel-tangle with ':comments org|both' strip out properties from comments.
+I have no desire to include emacs specific properties as comments in my script.
 #+BEGIN_SRC elisp
 (defun my/remove-properties (str)
     (string-join (seq-filter (lambda (st) (not (string-prefix-p ":" st))) (split-string str "\n")) "\n"))

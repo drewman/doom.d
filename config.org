@@ -50,13 +50,6 @@ Allow refiling to anything in the org directory, up to one bullet point. More bu
       :n :desc "insert link & goto" "C-c i" #'org-roam-insert
       :n :desc "insert link" "C-c I" #'org-roam-insert-immediate)
 #+END_SRC
-*** Spell-fu
-Do not spell check words in SRC blocks. Not working very well ATM.
-#+BEGIN_SRC elisp
-(setq-hook! 'org-mode-hook
-  spell-fu-faces-exclude '(org-src-block-faces))
-#+END_SRC
-**** TODO [#C] Fix spell-fu exclude org src block
 *** Todos
 I dislike dooms todo system, so set it back to the default (TODO, DONE).
 #+BEGIN_SRC elisp

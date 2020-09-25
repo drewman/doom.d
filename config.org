@@ -166,6 +166,19 @@ Since, it's not included with doom, we have to initialize it (for macos and linu
   (when (memq window-system '(mac ns x))
     (exec-path-from-shell-initialize)))
 #+END_SRC
+** IRC
+Setup circe with password from ~/.private.el
+#+BEGIN_SRC elisp
+(load! "~/.private.el")
+
+(after! circe
+  (setq circe-network-options
+      `(("Freenode"
+         :nick "bobtheorc"
+         :channels ("#emacs" "#emacs-circe")
+         :nickserv-password ,freenode-password))))
+
+#+END_SRC
 * Packages
 #+BEGIN_SRC elisp :tangle packages.el
 (package! gh-md)

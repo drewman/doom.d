@@ -184,6 +184,7 @@ Setup circe with password from ~/.private.el
 (package! gh-md)
 (package! elfeed-goodies)
 (package! exec-path-from-shell)
+(package! terraform-mode)
 #+END_SRC
 
 * Helpful Doom Stuff

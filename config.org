@@ -113,6 +113,23 @@ I have no desire to include Emacs specific properties as comments in my script.
 #+BEGIN_SRC emacs-lisp
 (require 'ox-confluence)
 #+END_SRC
+*** Deft
+Some bug in doom that doesn't load deft keybinds so I've added my them here.
+#+BEGIN_SRC emacs-lisp
+(map! :map deft-mode-map
+        :i "C-n" #'evil-next-line
+        :i "C-p" #'evil-previous-line
+        :n "gr"  #'deft-refresh
+        :n "C-s" #'deft-filter
+        :n "N"   #'deft-new-file
+        :n "M"   #'deft-new-file-named
+        :n "r"   #'deft-rename-file
+        :n "a"   #'deft-new-file
+        :n "A"   #'deft-new-file-named
+        :n "d"   #'deft-delete-file
+        :n "D"   #'deft-archive-file
+        :n "q"   #'kill-current-buffer)
+#+END_SRC
 ** Global binds
 The ESC key is too far away. 'jk' is much easier to move to normal mode. (This is the doom default but included for specificity)
 The doom default is to exclude for visual mode (as well as normal, multiedit, emacs, and motion) but I don't want to use it in visual mode as well. I have rewrite ~evil-escape-excluded-states~ based on the way doom configures evil-escape.

@@ -11,8 +11,20 @@
 ** DOOM UI
 #+BEGIN_SRC emacs-lisp
 (setq doom-font (font-spec :family "JetBrains Mono" :size 14))
-(setq doom-theme 'doom-tomorrow-night)
+(setq doom-theme 'modus-vivendi)
 (setq display-line-numbers-type t)
+
+(use-package! modus-vivendi-theme
+  :custom
+  (modus-vivendi-theme-bold-constructs t)
+  (modus-vivendi-theme-slanted-constructs t)
+  (modus-vivendi-theme-completions 'opinionated)
+  (modus-vivendi-theme-fringes 'intense)
+  (modus-vivendi-theme-intense-hl-line t)
+  (modus-vivendi-theme-intense-paren-match t)
+  (modus-vivendi-theme-org-blocks 'rainbow)
+  (modus-vivendi-theme-scale-headings t)
+  (modus-vivendi-theme-variable-pitch-headings t))
 #+END_SRC
 ** Org
 *** Directories
@@ -185,6 +197,7 @@ Setup circe with password from ~/.private.el
 (package! elfeed-goodies)
 (package! exec-path-from-shell)
 (package! terraform-mode)
+(package! modus-vivendi-theme)
 #+END_SRC
 
 * Helpful Doom Stuff

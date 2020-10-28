@@ -191,6 +191,12 @@ Setup circe with password from ~/.private.el
          :nickserv-password ,freenode-password))))
 
 #+END_SRC
+** Dev
+*** Jenkins
+#+BEGIN_SRC emacs-lisp
+(after! jenkinsfile-mode
+  (add-to-list 'auto-mode-alist '("\\.jenkinsfile\\." . jenkinsfile-mode)))
+#+END_SRC
 * Packages
 #+BEGIN_SRC emacs-lisp :tangle packages.el
 (package! gh-md)
@@ -198,6 +204,8 @@ Setup circe with password from ~/.private.el
 (package! exec-path-from-shell)
 (package! terraform-mode)
 (package! modus-vivendi-theme)
+(package! groovy-mode)
+(package! jenkinsfile-mode)
 #+END_SRC
 
 * Helpful Doom Stuff

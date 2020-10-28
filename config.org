@@ -127,6 +127,7 @@ Convenience binds for all modes.
       :desc "M-x" "x" #'counsel-M-x
       :desc "other-window" "w o" #'other-window
       :desc "org-capture" "n n" #'org-roam-capture
+      :desc "find file" "n f" #'org-roam-find-file
       :desc "org-today" "n j" #'org-roam-dailies-today)
 #+END_SRC
 Set alt-leader to C-space instead of M-space to not conflict with my system binds.
